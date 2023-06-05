@@ -1,0 +1,4 @@
+Flask
+Flask-Cors
+gunicorn==19.6.0
+python-json-logger
