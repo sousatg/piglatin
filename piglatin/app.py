@@ -1,6 +1,7 @@
 from flask import Flask, request
 from flask_cors import CORS
 from piglatin import translatePhrase
+import json
 
 app = Flask(__name__)
 
@@ -12,11 +13,13 @@ def index():
 
 @app.route('/translate', methods=["POST"])
 def translate_text():
-    data = request.json
-
-    phrase = data.get('phrase')
+    phrase = request.json.get('phrase')
 
     if phrase == None:
-        return (), 400
+        return json.dumps({
+            "error": "Phrase not provided"
+        })
+    
+    print(phrase)
     
     return translatePhrase(phrase)
