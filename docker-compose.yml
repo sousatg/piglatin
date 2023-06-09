@@ -5,9 +5,30 @@ services:
     environment:
       PORT: ${PORT}
       DEBUG: ${DEBUG}
+      DATABASE_ENGINE: ${DATABASE_ENGINE}
+      DATABASE_HOST: ${DATABASE_HOST}
+      DATABASE_NAME: ${DATABASE_NAME}
+      DATABASE_USER: ${DATABASE_USER}
+      DATABASE_PASSWORD: ${DATABASE_PASSWORD}
+      DATABASE_PORT: ${DATABASE_PORT}
 
     ports:
       - ${PORT}:5000
+    volumes:
+      - ./piglatin:/app
+
+  tests:
+    build: ./piglatin
+    command: "python -m unittest discover tests"
+    environment:
+      PORT: ${PORT}
+      DEBUG: ${DEBUG}
+      DATABASE_ENGINE: ${DATABASE_ENGINE}
+      DATABASE_HOST: ${DATABASE_HOST}
+      DATABASE_NAME: ${DATABASE_NAME}
+      DATABASE_USER: ${DATABASE_USER}
+      DATABASE_PASSWORD: ${DATABASE_PASSWORD}
+      DATABASE_PORT: ${DATABASE_PORT}
     volumes:
       - ./piglatin:/app
 

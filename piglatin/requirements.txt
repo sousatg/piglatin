@@ -2,3 +2,9 @@ Flask
 Flask-Cors
 gunicorn==19.6.0
 python-json-logger
+Flask-SQLAlchemy
+psycopg2-binary
+Flask-Migrate
+bcrypt
+flask-marshmallow
+sqlalchemy_utils
