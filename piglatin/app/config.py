@@ -16,6 +16,8 @@ def generate_database_url():
 class Config:
     DEBUG = os.environ.get("DEBUG", False).lower() == "true"
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+    MAIL_SERVER = os.environ.get('MAIL_SERVER')
+    MAIL_PORT = os.environ.get('MAIL_PORT')
 
 class TestConfig(Config):
     DEBUG = True

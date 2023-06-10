@@ -8,3 +8,4 @@ Flask-Migrate
 bcrypt
 flask-marshmallow
 sqlalchemy_utils
+Flask-Mail
