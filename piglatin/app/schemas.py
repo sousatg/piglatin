@@ -10,3 +10,8 @@ class RegistrationSchema(ma.Schema):
     @post_load
     def make_user(self, data, **kwargs):
         return User(**data)
+
+
+class LoginSchema(ma.Schema):
+    email = fields.Email(required=True, allow_none=False)
+    password = ma.Str(required=True, allow_none=False)

@@ -9,3 +9,4 @@ bcrypt
 flask-marshmallow
 sqlalchemy_utils
 Flask-Mail
+flask-jwt-extended

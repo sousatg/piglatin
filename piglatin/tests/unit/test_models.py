@@ -21,9 +21,7 @@ class TestUserModel(unittest.TestCase):
         """
         GIVEN a User model
         WHEN a new user is confirmed
-        THEN check if it was confirmed with success
-        AND confirmed_at was set
-        ÃND confirmation token as removed 
+        THEN check if it was confirmed with success, confirmed_at was set and confirmation token as removed 
         """
         user = User(email="test@email.com", password="testpassword")
 
@@ -36,3 +34,23 @@ class TestUserModel(unittest.TestCase):
         self.assertTrue(user.confirmed)
         self.assertIsNotNone(user.confirmed_at)
         self.assertIsNone(user.confirmation_token)
+
+    def test_valid_password(self):
+        """
+        GIVEN a User 
+        WHEN a valid password is verified
+        THEN true should be returned if the password is valid
+        """
+        user = User(email="test@email.com", password="testpassword")
+
+        self.assertTrue(user.is_valid_password("testpassword"))
+
+    def test_invalid_password(self):
+        """
+        GIVEN a User 
+        WHEN a invalid password is verified
+        THEN false should be returned
+        """
+        user = User(email="test@email.com", password="testpassword")
+
+        self.assertFalse(user.is_valid_password("invalid_password"))

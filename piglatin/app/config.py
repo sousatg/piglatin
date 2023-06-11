@@ -18,6 +18,7 @@ class Config:
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     MAIL_SERVER = os.environ.get('MAIL_SERVER')
     MAIL_PORT = os.environ.get('MAIL_PORT')
+    SECRET_KEY = os.environ.get('JWT_SECRET_KEY')
 
 class TestConfig(Config):
     DEBUG = True

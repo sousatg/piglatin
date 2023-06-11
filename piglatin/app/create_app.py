@@ -1,5 +1,5 @@
 from flask import Flask
-from app.extensions import db, migrate, ma, CORS, mail
+from app.extensions import db, migrate, ma, CORS, mail, jwt
 from app.config import ProductionConfig
 
 
@@ -13,6 +13,7 @@ def create_app(config_class=ProductionConfig):
         ma.init_app(app)
         CORS(app)
         mail.init_app(app)
+        jwt.init_app(app)
 
         register_blueprints(app)
 

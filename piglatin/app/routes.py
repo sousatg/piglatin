@@ -1,8 +1,13 @@
 from flask import Blueprint, request, jsonify
 from flask_mail import Message
+from flask_jwt_extended import create_access_token
+from flask_jwt_extended import create_refresh_token
+from flask_jwt_extended import jwt_required
+from flask_jwt_extended import get_jwt_identity
 from app.piglatin import translatePhrase
 from app.models import User
 from app.schemas import RegistrationSchema
+from app.schemas import LoginSchema
 from app.extensions import db, mail
 import json
 
@@ -91,3 +96,27 @@ def translate_text():
     print(phrase)
     
     return translatePhrase(phrase)
+
+@bp.post('/login')
+def login():
+    errors = LoginSchema().validate(request.json)
+
+    if errors:
+        return jsonify(errors), 400
+
+    data = LoginSchema().load(request.json)
+
+    user = User.query.filter_by(email=data.get("email")).first()
+
+    if user is None or not user.is_valid_password(data.get("password")):
+        return jsonify({
+            "msg": "Bad username or password"
+        }), 401
+    
+    access_token = create_access_token(identity=user.id)
+    refresh_token = create_refresh_token(identity=user.id)
+
+    return jsonify({
+        "access_token": access_token, 
+        "refresh_token": refresh_token}
+    ), 200
