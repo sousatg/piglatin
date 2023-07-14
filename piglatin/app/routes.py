@@ -2,13 +2,14 @@ from flask import Blueprint, request, jsonify
 from flask_mail import Message
 from flask_jwt_extended import create_access_token
 from flask_jwt_extended import create_refresh_token
-from flask_jwt_extended import jwt_required
+from flask_jwt_extended import verify_jwt_in_request
 from flask_jwt_extended import get_jwt_identity
 from app.piglatin import translatePhrase
 from app.models import User
 from app.schemas import RegistrationSchema
 from app.schemas import LoginSchema
 from app.extensions import db, mail
+from app.rate_limit import RateLimit
 import json
 
 bp = Blueprint('main', __name__)
@@ -86,14 +87,31 @@ def confirm_user_email(token):
 
 @bp.route('/translate', methods=["POST"])
 def translate_text():
+    is_jwt_verified = verify_jwt_in_request(optional=True)
+
+    identity = None
+    if is_jwt_verified == None:
+        identity = request.remote_addr
+    else:
+        identity = get_jwt_identity()
+
+    rateLimit = RateLimit()
+
+    rateLimit.get_limit(identity)
+
+    remainingTries = int(rateLimit.remainingTries)
+
+    if remainingTries + 1 < 1:
+        return jsonify({
+            "msg": "Too many requests"
+        }), 429
+
     phrase = request.json.get('phrase')
 
     if phrase == None:
         return json.dumps({
             "error": "Phrase not provided"
         })
-    
-    print(phrase)
     
     return translatePhrase(phrase)
 
