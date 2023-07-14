@@ -28,6 +28,8 @@ COPY . /app
 
 RUN pip install --no-cache /wheels/*
 
+RUN pip install debugpy
+
 EXPOSE 5000
 
 ENTRYPOINT [ "/app/docker-entrypoint.sh" ]
