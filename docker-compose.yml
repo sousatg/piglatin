@@ -2,6 +2,9 @@ version: "3"
 services:
   piglatin:
     build: ./piglatin
+    depends_on:
+      - database
+      - cache
     environment:
       PORT: ${PORT}
       DEBUG: ${DEBUG}
@@ -11,24 +14,11 @@ services:
       DATABASE_USER: ${DATABASE_USER}
       DATABASE_PASSWORD: ${DATABASE_PASSWORD}
       DATABASE_PORT: ${DATABASE_PORT}
-
+      MAIL_SERVER: ${MAIL_SERVER}
+      MAIL_PORT: ${MAIL_PORT}
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY}
     ports:
       - ${PORT}:5000
-    volumes:
-      - ./piglatin:/app
-
-  tests:
-    build: ./piglatin
-    command: "python -m unittest discover tests"
-    environment:
-      PORT: ${PORT}
-      DEBUG: ${DEBUG}
-      DATABASE_ENGINE: ${DATABASE_ENGINE}
-      DATABASE_HOST: ${DATABASE_HOST}
-      DATABASE_NAME: ${DATABASE_NAME}
-      DATABASE_USER: ${DATABASE_USER}
-      DATABASE_PASSWORD: ${DATABASE_PASSWORD}
-      DATABASE_PORT: ${DATABASE_PORT}
     volumes:
       - ./piglatin:/app
 
@@ -43,6 +33,22 @@ services:
     volumes:
       - db:/var/lib/postgresql/data
 
+  smtp4dev:
+    image: rnwood/smtp4dev:v3
+    ports:
+      - "2525:25"
+      - "3001:80"
+
+  cache:
+    image: redis:6.2-alpine
+    ports:
+      - "6379:6379"
+    command: redis-server --save 20 1 --loglevel warning --requirepass eYVX7EwVmmxKPCDmwMtyKVge8oLd2t81
+    volumes:
+      - cache:/data
+
 volumes:
   db:
+    driver: local
+  cache:
     driver: local

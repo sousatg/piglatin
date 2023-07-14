@@ -1,0 +1,19 @@
+# version: "3"
+# services:
+#   tests:
+#     build: ./piglatin
+#     command: "python -m unittest discover tests"
+#     environment:
+#       PORT: ${PORT}
+#       DEBUG: ${DEBUG}
+#       DATABASE_ENGINE: ${DATABASE_ENGINE}
+#       DATABASE_HOST: ${DATABASE_HOST}
+#       DATABASE_NAME: ${DATABASE_NAME}
+#       DATABASE_USER: ${DATABASE_USER}
+#       DATABASE_PASSWORD: ${DATABASE_PASSWORD}
+#       DATABASE_PORT: ${DATABASE_PORT}
+#       MAIL_SERVER: ${MAIL_SERVER}
+#       MAIL_PORT: ${MAIL_PORT}
+#       JWT_SECRET_KEY: ${JWT_SECRET_KEY}
+#     volumes:
+#       - ./piglatin:/app

@@ -1,0 +1,25 @@
+version: "3"
+services:
+  piglatin:
+    build: ./piglatin
+    command: "python -m debugpy --wait-for-client --listen 0.0.0.0:5678 -m flask run --host=0.0.0.0"
+    depends_on:
+      - database
+      - cache
+    environment:
+      PORT: ${PORT}
+      DEBUG: ${DEBUG}
+      DATABASE_ENGINE: ${DATABASE_ENGINE}
+      DATABASE_HOST: ${DATABASE_HOST}
+      DATABASE_NAME: ${DATABASE_NAME}
+      DATABASE_USER: ${DATABASE_USER}
+      DATABASE_PASSWORD: ${DATABASE_PASSWORD}
+      DATABASE_PORT: ${DATABASE_PORT}
+      MAIL_SERVER: ${MAIL_SERVER}
+      MAIL_PORT: ${MAIL_PORT}
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY}
+    ports:
+      - ${PORT}:5000
+      - 5678:5678
+    volumes:
+      - ./piglatin:/app
