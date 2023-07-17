@@ -1,0 +1,114 @@
+openapi: 3.0.0
+
+servers:
+  - url: http://localhost:5000
+    description: Development Server
+
+info:
+  title: Piglatin API
+  version: 0.1.0
+
+basePath: /
+schemes:
+  - https
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+paths:
+  /login:
+    post:
+      summary: User login
+      tags:
+        - Auth
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+      produces:
+        - application/json:
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  access_token:
+                    type: string
+                  refresh_token:
+                    type: string
+  /register:
+    post:
+      summary: User registration
+      tags:
+        - Auth
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+      produces:
+        - application/json
+      responses:
+        201:
+          description: Created
+        400:
+          description: Bad Request
+        500:
+          description: Internal Error
+
+  /verification:
+    post:
+      summary: User account verification
+      tags:
+        - Auth
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                token:
+                  type: string
+      produces:
+        - application/json:
+      responses:
+        200:
+          description: OK
+        400:
+          description: Error validating the user
+
+  /translate:
+    post:
+      summary: Translate a phrase into Piglatin
+      tags:
+        - Translate
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                phrase:
+                  type: string
