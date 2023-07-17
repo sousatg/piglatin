@@ -112,3 +112,31 @@ paths:
               properties:
                 phrase:
                   type: string
+      produces:
+        - application/json:
+
+      responses:
+        200:
+          description: OK
+          headers:
+            X-RateLimit-Limit:
+              schema:
+                type: integer
+              description: Request limit per hour.
+            X-RateLimit-Remaining:
+              schema:
+                type: integer
+              description: The number of requests left.
+            X-RateLimit-Reset:
+              schema:
+                type: string
+              description: The time at which the rate limit resets.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  phrase:
+                    type: string
+        400:
+          description: Error validating the user

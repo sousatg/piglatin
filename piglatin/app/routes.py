@@ -1,4 +1,4 @@
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify, Response
 from flask_mail import Message
 from flask_jwt_extended import create_access_token
 from flask_jwt_extended import create_refresh_token
@@ -120,7 +120,12 @@ def translate_text():
             "error": "Phrase not provided"
         }), 400
     
-    return translatePhrase(phrase)
+    resp = Response(translatePhrase(phrase))
+    resp.headers['X-Rate-Limit-Limit'] = 5
+    resp.headers['X-Rate-Limit-Remaining'] = remainingTries
+    resp.headers['X-Rate-Limit-Reset'] = 60
+
+    return resp
 
 @bp.post('/login')
 def login():
