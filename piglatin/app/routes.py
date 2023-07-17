@@ -7,6 +7,7 @@ from flask_jwt_extended import get_jwt_identity
 from app.piglatin import translatePhrase
 from app.models import User
 from app.schemas import RegistrationSchema
+from app.logger import logger
 from app.schemas import LoginSchema
 from app.extensions import db, mail
 from app.rate_limit import RateLimit
@@ -36,6 +37,7 @@ def user_registration():
     error = RegistrationSchema().validate(request.json)
 
     if error:
+        logger.info("Missing field when trying to register", extra={"error": error})
         return jsonify(error), 400
     
     user = RegistrationSchema().load(request.json)
@@ -43,14 +45,16 @@ def user_registration():
     count = User.query.filter_by(email=user.get_email()).count()
 
     if count != 0:
+        logger.info("Email already registered")
         return jsonify({
-            "error": "Email address already in registered"
+            "error": "Email address already registered."
         }), 400
 
     try:
         db.session.add(user)
         db.session.commit()
     except Exception as e:
+        logger.warning("Failed to persist the user in the database")
         return jsonify({
             "error": str(e)
         }), 400
@@ -58,6 +62,7 @@ def user_registration():
     try:
         send_mail_with_token(email=user.get_email(), token=user.get_confirmation_token())
     except Exception as e:
+        logger.warning("Failed to send email to user", extra={"exception": str(e)})
         return jsonify({
             "error": str(e)
         }), 500
@@ -70,6 +75,7 @@ def confirm_user_email():
     token = request.json.get('token')
 
     if token == None:
+        logger.info("Missing verification token")
         return jsonify({
             "msg": "Missing token"
         }), 400
@@ -77,6 +83,7 @@ def confirm_user_email():
     user = User.query.filter_by(confirmation_token=token).first()
 
     if user is None:
+        logger.info("Could not find a user with the assigned validation token", extra={"token": token})
         return jsonify({
             "msg": "Token isn't valid"
         }), 400
@@ -86,6 +93,7 @@ def confirm_user_email():
     try:
         db.session.commit()
     except Exception as e:
+        logger.warning("Failed to save the user verification change", {"user_id": user.id})
         return jsonify({
             "error": str(e)
         }), 500
@@ -109,6 +117,7 @@ def translate_text():
     remainingTries = int(rateLimit.remainingTries)
 
     if remainingTries + 1 < 1:
+        logger.info("User has passed the limite of request", extra={"identity": identity})
         return jsonify({
             "msg": "Too many requests"
         }), 429
@@ -116,6 +125,7 @@ def translate_text():
     phrase = request.json.get('phrase')
 
     if phrase == None:
+        logger.info("Request missing the phrase in request body")
         return json.dumps({
             "error": "Phrase not provided"
         }), 400
@@ -132,6 +142,7 @@ def login():
     errors = LoginSchema().validate(request.json)
 
     if errors:
+        logger.info("Login request bad formated", extra={"errors": errors})
         return jsonify(errors), 400
 
     data = LoginSchema().load(request.json)

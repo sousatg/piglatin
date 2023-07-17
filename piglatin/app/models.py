@@ -20,8 +20,11 @@ class User(db.Model):
         self.confirmation_token = uuid.uuid4().hex
 
     def set_password(self, value):
-        hashed_password = bcrypt.hashpw(value.encode('utf-8'), bcrypt.gensalt())
-        self.password = hashed_password.decode('utf-8')
+        salt = bcrypt.gensalt()
+        bpassowrd = value.encode('utf-8')
+        hashed_password = bcrypt.hashpw(bpassowrd, salt)
+        encoded_password = hashed_password.decode('utf-8')
+        self.password = encoded_password
 
     def set_email(self, value):
         self.email = value
@@ -38,6 +41,8 @@ class User(db.Model):
         self.confirmation_token = None
 
     def is_valid_password(self, password):
-        result = bcrypt.checkpw(password.encode('utf-8'), self.password.encode('utf-8'))
+        bpassword = password.encode('utf-8')
+        bselfPassword = self.password.encode('utf-8')
+        result = bcrypt.checkpw(bpassword, bselfPassword)
 
         return result

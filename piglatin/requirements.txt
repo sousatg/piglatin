@@ -11,3 +11,4 @@ sqlalchemy_utils
 Flask-Mail
 flask-jwt-extended
 redis
+marshmallow-sqlalchemy
