@@ -3,6 +3,8 @@ from app.models import User
 from app.extensions import db
 
 class TestUserConfirmation(BaseTestCase):
+    url = "/verification"
+
     def test_confirm_user(self):
         """
         GIVEN a user with email test@email.com is unconfirmed
@@ -14,7 +16,7 @@ class TestUserConfirmation(BaseTestCase):
         db.session.add(user)
         db.session.commit()
 
-        response = self.client.get(f"/confirm/{user.confirmation_token}")
+        response = self.client.post(self.url, json={"token": user.confirmation_token})
 
         self.assertEqual(response.status_code, 204)
 
@@ -33,7 +35,7 @@ class TestUserConfirmation(BaseTestCase):
         db.session.add(user)
         db.session.commit()
 
-        response = self.client.get(f"/confirm/random_token")
+        response = self.client.post(self.url, json={"token": "random_token"})
 
         self.assertEqual(response.status_code, 400)
 
@@ -52,10 +54,10 @@ class TestUserConfirmation(BaseTestCase):
         db.session.add(user)
         db.session.commit()
 
-        response = self.client.get(f"/confirm/{user.confirmation_token}")
+        response = self.client.post(self.url, json={"token": user.confirmation_token})
 
         self.assertEqual(response.status_code, 204)
 
-        response = self.client.get(f"/confirm/{user.confirmation_token}")
+        response = self.client.post(self.url, json={"token": user.confirmation_token})
 
         self.assertEqual(response.status_code, 400)

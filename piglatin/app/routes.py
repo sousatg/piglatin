@@ -65,13 +65,20 @@ def user_registration():
     return jsonify({}), 201
 
 
-@bp.route("/confirm/<token>")
-def confirm_user_email(token):
+@bp.route("/verification", methods=["POST"])
+def confirm_user_email():
+    token = request.json.get('token')
+
+    if token == None:
+        return jsonify({
+            "msg": "Missing token"
+        }), 400
+
     user = User.query.filter_by(confirmation_token=token).first()
 
     if user is None:
         return jsonify({
-            "error": "Token isn't valid"
+            "msg": "Token isn't valid"
         }), 400
     
     user.confirm()
@@ -81,7 +88,7 @@ def confirm_user_email(token):
     except Exception as e:
         return jsonify({
             "error": str(e)
-        }), 400
+        }), 500
     
     return jsonify(), 204
 
@@ -111,7 +118,7 @@ def translate_text():
     if phrase == None:
         return json.dumps({
             "error": "Phrase not provided"
-        })
+        }), 400
     
     return translatePhrase(phrase)
 
