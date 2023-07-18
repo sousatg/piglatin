@@ -4,6 +4,9 @@ debug:
 build:
 	docker build -t piglatin-api /app
 
+tests:
+	docker-compose exec piglatin python -m unittest discover tests
+
 push:
 	doctl registry login
 	docker tag piglatin-api registry.digitalocean.com/piglatin

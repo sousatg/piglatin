@@ -56,8 +56,22 @@ services:
     volumes:
       - cache:/data
 
+  prometheus:
+    image: prom/prometheus:v2.36.2
+    ports:
+      - "9090:9090"
+    command:
+      - "--web.enable-lifecycle"
+      - "--config.file=/etc/prometheus/prometheus.yml"
+      - "--log.level=warn"
+    volumes:
+      - ./docker/prometheus:/etc/prometheus
+      - prometheus-data:/prometheus
+
 volumes:
   db:
     driver: local
   cache:
+    driver: local
+  prometheus-data:
     driver: local
