@@ -16,9 +16,10 @@ Follow the following directions for clonning the repository and installing requi
 
 #### What you'll need
 
-- Git
-- Docker
-- Docker-Compose
+- [Git](https://git-scm.com/)
+- [Docker](https://www.docker.com/)
+- [Docker-Compose](https://docs.docker.com/compose/)
+- make ([Windows - CMD](http://gnuwin32.sourceforge.net/packages/make.htm), MacOS - brew, Ubuntu/WSL - apt)
 
 #### Clone the Repository
 
@@ -59,6 +60,11 @@ Create a `.env` file at the root folder with the following environment variables
 
 - `make tests` - will run the django tests
 - `make bash` - runs `docker-compose exec blog bash`
+
+## API Reference / Monitoring
+
+- [Swagger UI](http://localhost:5001)
+- [Prometheys](http://localhost:9090)
 
 ## Built With
 
