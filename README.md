@@ -1,14 +1,5 @@
 # Piglatin API
 
-## Built With
-
-- Flask
-- Flask-JWT-Extended
-- SQLAlchemy
-- Gunicorn
-- Postgres
-- Redis
-
 ## Features
 
 - API rate limited (user rate)
@@ -32,7 +23,7 @@ Follow the following directions for clonning the repository and installing requi
 #### Clone the Repository
 
 ```
-git clone https://
+git clone https://github.com/sousatg/piglatin
 ```
 
 #### Change directories into the main project folder
@@ -41,7 +32,7 @@ git clone https://
 cd piglatin
 ```
 
-### Local Development Setup
+#### Create a file with the environment variables
 
 Create a `.env` file at the root folder with the following environment variables:
 
@@ -68,3 +59,12 @@ Create a `.env` file at the root folder with the following environment variables
 
 - `make tests` - will run the django tests
 - `make bash` - runs `docker-compose exec blog bash`
+
+## Built With
+
+- Flask
+- Flask-JWT-Extended
+- SQLAlchemy
+- Gunicorn
+- Postgres
+- Redis
