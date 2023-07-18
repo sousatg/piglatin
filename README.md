@@ -64,7 +64,7 @@ Create a `.env` file at the root folder with the following environment variables
 ## API Reference / Monitoring
 
 - [Swagger UI](http://localhost:5001)
-- [Prometheys](http://localhost:9090)
+- [Prometheus](http://localhost:9090)
 
 ## Built With
 
